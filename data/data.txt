@@ -1,0 +1,3 @@
+This dataset was downloaded from "https://www.kaggle.com/datasets/ikarus777/best-artworks-of-all-time". Creative Commons license type BY-NC-SA 4.0.
+
+The original dataset contains artworks by 50 artists. This directory only contains resized images by the following 5 artists: Leonardo da Vinci, Pablo Picasso, Claude Monet, Vincent van Gogh, and Salvador Dali.

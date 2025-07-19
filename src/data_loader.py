@@ -1,4 +1,7 @@
 # The purpose of this script is to load the dataset for training/finetuning the model.
+# To use this data_loader, run the following code:
+# from data_loader import data_loader
+# train, val = data_loader()
 
 # Import necessary libraries
 

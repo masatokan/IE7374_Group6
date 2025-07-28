@@ -1,0 +1,31 @@
+# Model and training hyperparameters
+model:
+  base_model: "stabilityai/sd-turbo"
+  clip_model: "openai/clip-vit-base-patch32"
+training:
+  learning_rate: 1e-4
+  num_epochs: 10
+  lora_rank: 4
+  resolution: 256
+  validation_split: 0.1
+  lora_dropout: 0.05
+  lora_bias: "none"
+  use_dora: false
+  random_horizontal_flip_p: 0.5
+  random_rotation_degrees: 10
+  color_jitter:
+    brightness: 0.1
+    contrast: 0.1
+    saturation: 0.1
+    hue: 0.05
+  normalization:
+    mean: 0.5
+    std: 0.5
+inference:
+  num_inference_steps: 25
+  guidance_scale: 7.5
+fusion:
+  weights: [0.5, 0.5]
+  adapter_paths:
+    - "outputs/lora_weights/Pablo_Picasso"
+    - "outputs/lora_weights/Vincent_van_Gogh"

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Style Fusion</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Artist Style Fusion</h1>
+        <p>Select two artists and enter a prompt to generate a fused-style image.</p>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <form method="POST" action="/generate" id="generate-form">
+            <label for="artist1">Artist 1:</label>
+            <select name="artist1" id="artist1" required>
+                <option value="" disabled selected>Select an artist</option>
+                {% for artist in artists %}
+                    <option value="{{ artist }}">{{ artist }}</option>
+                {% endfor %}
+            </select>
+            <label for="artist2">Artist 2:</label>
+            <select name="artist2" id="artist2" required>
+                <option value="" disabled selected>Select an artist</option>
+                {% for artist in artists %}
+                    <option value="{{ artist }}">{{ artist }}</option>
+                {% endfor %}
+            </select>
+            <label for="prompt">Prompt:</label>
+            <input type="text" name="prompt" id="prompt" placeholder="e.g., A landscape" value="A landscape">
+            <button type="submit">Generate Image</button>
+        </form>
+        <div id="progress-container" style="display: none;">
+            <p id="progress-message">Starting...</p>
+            <div class="progress-bar">
+                <div id="progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const socket = io();
+        socket.on('progress', function(data) {
+            const progressContainer = document.getElementById('progress-container');
+            const progressMessage = document.getElementById('progress-message');
+            const progressFill = document.getElementById('progress-fill');
+            progressContainer.style.display = 'block';
+            progressMessage.textContent = data.message;
+            progressFill.style.width = data.progress + '%';
+            if (data.progress === 100) {
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 2000);
+            }
+        });
+        document.getElementById('generate-form').addEventListener('submit', function() {
+            document.getElementById('progress-container').style.display = 'block';
+            document.getElementById('progress-message').textContent = 'Starting...';
+            document.getElementById('progress-fill').style.width = '0%';
+        });
+    </script>
+</body>
+</html>

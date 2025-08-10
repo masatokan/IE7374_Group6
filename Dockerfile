@@ -10,8 +10,12 @@ libgl1-mesa-glx \
 libglib2.0-0 \
 && rm -rf /var/lib/apt/lists/*
 
-COPY src/ src/ COPY utils/ utils/ COPY configs/ configs/
+COPY src/ ./src/
+COPY data/ ./data/
+COPY utils/ ./utils/
+COPY configs/ ./configs/
+COPY outputs/ ./outputs/
 
 ENV PYTHONPATH=/IE7374-Group6
 
-CMD ["python", "src/model_runner.py"]
+CMD ["python", "-m", "src/model_runner"]

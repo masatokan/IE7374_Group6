@@ -40,21 +40,39 @@ project-root/
    - Update `configs/model_config.yaml` with desired hyperparameters or adapter paths.
 
 ## Usage
-1. **Train LoRA Adapters**:
-   ```bash
-   python src/train.py
-   ```
-   - Fine-tunes LoRA for each artist, saving weights to `outputs/lora_weights/`.
-2. **Run Inference and Evaluation**:
-   ```bash
-   python src/model_runner.py
-   ```
-   - Generates base and fused images, evaluates CLIP scores, and saves images to `outputs/images/`.
-3. **Docker**:
-   ```bash
-   docker build -t style-fusion .
-   docker run -v $(pwd)/data:/app/data -v $(pwd)/outputs:/app/outputs style-fusion
-   ```
+
+### Running the Web App
+- Start the Flask web app with WebSocket support for real-time progress updates:
+  ```bash
+  python app.py
+  ```
+- The app will automatically open `http://localhost:5001` in your default browser.
+- Select two artists, enter a prompt, and click "Generate Image" to create fused-style images.
+- A progress bar and status messages will display during training and generation.
+- Generated images are saved in `outputs/images/web_outputs/` and displayed in the browser.
+
+### Running the Pipeline via Notebook
+- Run the demo notebook for an interactive walkthrough:
+  ```bash
+  cd notebooks
+  jupyter notebook demo_pipeline.ipynb
+  ```
+
+### Outputs
+- **LoRA Weights**: Saved in `outputs/lora_weights/<artist_name>/` (e.g., `outputs/lora_weights/Pablo_Picasso/`).
+- **Generated Images**: Saved in `outputs/images/fusion_outputs/<fusion_name>/` (notebook) or `outputs/images/web_outputs/<fusion_name>/` (web app).
+- **Logs**: Evaluation results (CLIP scores) are logged to the console or `outputs/samples.txt` if redirected.
+
+### Docker
+Build and run the web app in a Docker container:
+```bash
+docker build -t style-fusion .
+docker run -p 5001:5001 -v $(pwd)/data:/IE7374_Group6/data -v $(pwd)/outputs:/IE7374_Group6/outputs style-fusion
+```
+For the notebook, modify the `Dockerfile` to include Jupyter and run:
+```bash
+docker run -p 8888:8888 -v $(pwd)/data:/IE7374_Group6/data -v $(pwd)/outputs:/IE7374_Group6/outputs style-fusion jupyter notebook --ip=0.0.0.0 --allow-root --no-browser
+```
 
 ## Requirements
 - Python 3.10+

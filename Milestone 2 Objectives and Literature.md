@@ -16,6 +16,49 @@ We fine-tune Stable Diffusion for individual artists using LoRA, allowing us to 
 
 After training LoRA modules for several artists, we merge them using custom weights to blend their styles in new ways. This lets users generate hybrid-style images like “60% Picasso, 40% Van Gogh.” 
 
+## Model Implementation 
+
+1. Base Model 
+
+- We use Stable Diffusion v1.5, a latent diffusion model (LDM) that generates images in a compressed latent space for efficiency. 
+- Text Encoder: CLIP-based encoder converts prompts into an embedding vector. 
+- U-Net Denoiser: Iteratively refines a noisy latent into a coherent image. 
+- VAE Decoder: Converts the latent representation into a full-resolution image. 
+
+2. Prompt Conditioning 
+
+- Prompts are embedded by CLIP into a joint vision-language space. 
+- Stable Diffusion uses cross-attention to fuse these embeddings with the latent image representation during denoising. 
+- For reproducibility: 
+- Fixed random seed 
+- Defined guidance scale to control style adherence vs. creative freedom. 
+
+3. Artist-Specific Fine-Tuning with LoRA 
+
+- LoRA adds small trainable matrices to attention layers, enabling parameter-efficient fine-tuning. 
+- Only a small % of parameters are updated (~0.1–1%), preserving the base model. 
+- Training Pipeline: 
+- Curate dataset of artist’s works.
+- Preprocess (resize, normalize, augment). 
+- Train LoRA module for epochs using Stable Diffusion’s attention layers. 
+- Save LoRA weights separately from base model.
+
+4. Style Fusion via LoRA Merging 
+
+- Each artist’s LoRA weights are stored independently. 
+- To blend styles: 
+- Load multiple LoRAs into the base model. 
+- Apply weighted interpolation between their matrices. 
+- This allows for continuous control over hybrid style generation. 
+
+5. Evaluation & Analysis
+
+- Qualitative: Side-by-side comparisons of generated images per prompt. 
+- Quantitative: 
+- CLIP similarity between prompt and generated image. 
+- Style similarity scores using pre-trained style classifiers. 
+- User Feedback: Artists and designers rate perceived style fidelity and creativity. 
+
 ## Literature Review 
 
 We based our work on recent research and tools at the intersection of natural language processing and generative image modeling: 

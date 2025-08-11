@@ -15,7 +15,15 @@ COPY data/ ./data/
 COPY utils/ ./utils/
 COPY configs/ ./configs/
 COPY outputs/ ./outputs/
+COPY app.py .
+COPY templates/ ./templates/
+COPY static/ ./static/
 
 ENV PYTHONPATH=/IE7374-Group6
 
-CMD ["python", "-m", "src/model_runner"]
+# CMD ["python", "-m", "src/model_runner"]
+# Expose port for Flask app
+EXPOSE 5001
+# Use ENTRYPOINT and CMD for flexibility
+ENTRYPOINT ["python"]
+CMD ["app.py"]

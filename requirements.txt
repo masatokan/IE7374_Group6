@@ -10,3 +10,5 @@ tqdm>=4.60.0
 scikit-learn>=1.0.0
 pyyaml>=6.0
 matplotlib>=3.5.0
+flask>=3.0.0
+flask_socketio>=5.5.0
